@@ -1,16 +1,19 @@
 'use strict';
 
-exports.info = function (msg) {
-    return console.log('I ' + msg);
-};
+var Log = {
+    info: function (msg) {
+        return console.log('I ' + msg);
+    },
 
-exports.debug = function (msg) {
-    if (process.env.DEBUG) {
-        return console.log('D ' + msg);
+    debug: function (msg) {
+        if (process.env.DEBUG) {
+            return console.log('D ' + msg);
+        }
+    },
+
+    error: function (msg) {
+        return console.error('E ' + msg);
     }
 };
 
-exports.error = function (msg) {
-    return console.error('E ' + msg);
-};
-
+module.exports = Log;
