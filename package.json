@@ -1,0 +1,15 @@
+{
+  "name": "batsig",
+  "version": "0.1.0",
+  "description": "Listen for Twitter messages and relay them to other channels",
+  "main": "listen.js",
+  "dependencies": {
+    "twit": "^1.1.20"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lawrence Leonard Gilbert",
+  "license": "CC-BY-4.0"
+}

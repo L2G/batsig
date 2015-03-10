@@ -1,0 +1,3 @@
+#!/bin/bash
+# Test group
+PUSHOVER_USER_KEY=gQYGiPXcHwKwzS8k2b4BE4eHUYXA4w ${0%/*}/send "[TEST] $*"
