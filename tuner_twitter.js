@@ -9,6 +9,10 @@ var twitterCreds = require('./twitter_creds')();
 var TunerTwitter = stampit(
     {
         tuneIn: function() {
+            if (this.twitterID) {
+                log.debug('Already have Twitter ID: ' + this.twitterID);
+                return;
+            }
 
             var twitClient = new Twit(twitterCreds);
             var that = this;
