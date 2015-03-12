@@ -5,7 +5,7 @@ var log = require('./log');
 var twitterCreds = require('./twitter_creds')();
 
 var gotTwitterID = function (id) {
-    log.info('_gotTwitterID called with ' + id);
+    log.info('gotTwitterID called with ' + id);
 };
 
 function TunerTwitter() {
