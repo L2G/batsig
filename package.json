@@ -2,6 +2,10 @@
   "name": "batsig",
   "version": "0.1.0",
   "description": "Listen for Twitter messages and relay them to other channels",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/L2G/batsig"
+  },
   "main": "listen.js",
   "dependencies": {
     "twit": "^1.1.20"
