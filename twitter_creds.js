@@ -1,5 +1,8 @@
 'use strict';
 
+var dotenv = require('dotenv');
+dotenv.load();
+
 module.exports = function () {
     return {
         consumer_key:        process.env.TWITTER_CONSUMER_KEY,
