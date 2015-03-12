@@ -1,6 +1,6 @@
 var log = require('./log');
 var TunerTwitter = require('./tuner_twitter');
 
-var tt = new TunerTwitter();
-tt.tuneIn({screen_name: 'L2G'});
-log.debug('tuneIn just returned');
+var tt = TunerTwitter.create({twitterName: 'L2G'});
+log.debug('created new TunerTwitter');
+tt.tuneIn();

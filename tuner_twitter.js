@@ -1,30 +1,35 @@
 'use strict';
 
+var stampit = require('stampit');
 var Twit = require('twit');
+
 var log = require('./log');
 var twitterCreds = require('./twitter_creds')();
 
-var gotTwitterID = function (id) {
-    log.info('gotTwitterID called with ' + id);
-};
+var TunerTwitter = stampit(
+    {
+        tuneIn: function() {
 
-function TunerTwitter() {
-    return this;
-}
+            var twitClient = new Twit(twitterCreds);
+            var that = this;
 
-TunerTwitter.prototype.tuneIn = function (args) {
-    var twitterName = args.screen_name;
+            twitClient.get('users/show',
+                           { 'screen_name': that.twitterName },
+                           function (err, data, response) {
+                if (err) {
+                    return log.error('Twitter returned an error ' + response);
+                }
 
-    var twitClient = new Twit(twitterCreds);
-    twitClient.get('users/show', { 'screen_name': twitterName }, function (err, data, response) {
-        if (err) {
-            return log.error('Twitter returned an error ' + response);
+                log.debug('Looked up Twitter screen name: ' + that.twitterName);
+                log.debug('Got ID: ' + data.id);
+                that.twitterID = data.id;
+            });
         }
-
-        log.debug('Looked up Twitter screen name: ' + twitterName);
-        log.debug('Got ID: ' + data.id);
-        gotTwitterID(data.id);
-    });
-};
+    },
+    {
+        twitterName: null,
+        twitterID:   null
+    }
+);
 
 module.exports = TunerTwitter;
