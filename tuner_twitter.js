@@ -2,12 +2,12 @@
 
 var stampit = require('stampit');
 var Twit = require('twit');
-
+var TunerBase = require('./tuner_base');
 var log = require('./log');
 var twitterCreds = require('./twitter_creds')();
 
-var TunerTwitter = stampit(
-    {
+var TunerTwitter = TunerBase.compose(
+    stampit({
         tuneIn: function() {
             if (this.twitterID) {
                 log.debug('Already have Twitter ID: ' + this.twitterID);
@@ -33,7 +33,7 @@ var TunerTwitter = stampit(
     {
         twitterName: null,
         twitterID:   null
-    }
+    })
 );
 
 module.exports = TunerTwitter;
