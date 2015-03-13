@@ -15,18 +15,20 @@ var TunerTwitter = TunerBase.compose(
             }
 
             var twitClient = new Twit(twitterCreds);
-            var that = this;
+            var self = this;
 
             twitClient.get('users/show',
-                           { 'screen_name': that.twitterName },
+                           { 'screen_name': self.twitterName },
                            function (err, data, response) {
                 if (err) {
                     return log.error('Twitter returned an error ' + response);
                 }
 
-                log.debug('Looked up Twitter screen name: ' + that.twitterName);
+                log.debug('Looked up Twitter screen name: ' + self.twitterName);
                 log.debug('Got ID: ' + data.id);
-                that.twitterID = data.id;
+                self.twitterID = data.id;
+                if (self.emit('ready')) { return; }
+                return log.error('No one was listening to me! (TunerTwitter)');
             });
         }
     },
