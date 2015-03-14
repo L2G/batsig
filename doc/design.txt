@@ -1,10 +1,12 @@
 Tuner:
 
-* -> tuneIn - called after "ready" event received; tells the tuner to tune in
-* -> reset - called after "error" event received; reinitializes the tuner
-* [ev] ready - the tuner has done any necessary setup and is ready for tuneIn()
-* [ev] tuned - tuner is tuned in and will begin emitting messages at any time
+* -> setup     - called after creation, tells the tuner to do any pre-tuning setup
+                 it must do
+* -> tuneIn    - called after "ready" event received; tells the tuner to tune in
+* -> reset     - called after "error" event received; reinitializes the tuner
+* [ev] ready   - the tuner has done any necessary setup and is ready for tuneIn()
+* [ev] tuned   - tuner is tuned in and will begin emitting messages at any time
 * [ev] message - message received by the tuner, with message content
-* [ev] lost - tuner lost its connection (or analogue thereof)
-* [ev] error - tuner experienced an error; no other events will be emitted until
-               reset() is received
+* [ev] lost    - tuner lost its connection (or analogue thereof)
+* [ev] error   - tuner experienced an error; no other events will be emitted until
+                 reset() is received
