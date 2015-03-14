@@ -8,13 +8,17 @@ var twitterCreds = require('./twitter_creds')();
 
 var TunerTwitter = TunerBase.compose(
     stampit({
-        tuneIn: function tuneIn() {
+        setup: function setup() {
             if (this.twitterID) {
                 log.debug('Already have Twitter ID: ' + this.twitterID);
                 this.tunerReady();
             } else {
                 this.lookUpTwitterIdFor(this.twitterName);
             }
+        },
+        tuneIn: function tuneIn() {
+            log.debug('TunerTwitter.tuneIn() called');
+            return;
         },
         tunerReady: function tunerReady() {
             if (!this.twitterID) {
