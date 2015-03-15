@@ -16,15 +16,16 @@ var TunerTwitter = TunerBase.compose(
         setup: function setup() {
             if (this.twitterID) {
                 log.debug('Already have Twitter ID: ' + this.twitterID);
-                this.tunerReady();
+                this.readyCheck();
             } else {
                 this.lookUpTwitterIdFor(this.twitterName);
             }
         },
-        // tunerReady is called internally after setup is complete
-        tunerReady: function tunerReady() {
+        // readyCheck is called when a setup function is done.  If everything
+        // looks to be in order, it will emit the 'ready' signal.
+        readyCheck: function readyCheck() {
             if (!this.twitterID) {
-                log.error("TunerTwitter.tunerReady() called, but there's still no twitterID!");
+                log.debug("TunerTwitter.readyCheck(): still no twitterID");
             } else if (!this.emit('ready')) {
                 // Reaching this point means the 'ready' signal has been
                 // emitted, but there were no listeners
@@ -51,7 +52,7 @@ var TunerTwitter = TunerBase.compose(
                                log.debug('Looked up Twitter screen name: ' + name);
                                log.debug('Got ID: ' + data.id);
                                outerObject.twitterID = data.id;
-                               outerObject.tunerReady();
+                               outerObject.readyCheck();
                            });
         };
     })
