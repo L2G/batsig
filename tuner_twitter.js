@@ -5,6 +5,7 @@ var Twit = require('twit');
 var TunerBase = require('./tuner_base');
 var log = require('./log');
 var twitterCreds = require('./twitter_creds')();
+var util = require('util');
 
 var TunerTwitter = TunerBase.compose(
     stampit({
@@ -16,10 +17,6 @@ var TunerTwitter = TunerBase.compose(
                 this.lookUpTwitterIdFor(this.twitterName);
             }
         },
-        tuneIn: function tuneIn() {
-            log.debug('TunerTwitter.tuneIn() called');
-            return;
-        },
         tunerReady: function tunerReady() {
             if (!this.twitterID) {
                 log.error("TunerTwitter.tunerReady() called, but there's still no twitterID!");
@@ -30,7 +27,8 @@ var TunerTwitter = TunerBase.compose(
     },
     {
         twitterName: null,
-        twitterID:   null
+        twitterID:   null,
+        keywords:    null
     },
     function() {
         var outerObject = this,
@@ -51,5 +49,25 @@ var TunerTwitter = TunerBase.compose(
         };
     })
 );
+TunerTwitter.enclose(function () {
+    var outerObject = this,
+        twitClient = new Twit(twitterCreds),
+        twitStream = null;
 
+    this.tuneIn = function tuneIn () {
+        twitStream = twitClient.stream('statuses/filter', { follow: outerObject.twitterID });
+        twitStream.on('tweet', function (tweet) {
+            var text = tweet.text;
+            var hashtags = tweet.entities.hashtags;
+            outerObject.emit('message', util.inspect(text));
+            hashtags.forEach(function (hashtag) {
+                outerObject.emit('message', util.inspect(hashtag));
+            });
+        });
+        twitStream.on('disconnect', function (disconnectMessage) {
+            outerObject.emit('lost', 'Twitter disconnected with this message: ' + disconnectMessage);
+        });
+        outerObject.emit('tunedIn');
+    };
+});
 module.exports = TunerTwitter;
