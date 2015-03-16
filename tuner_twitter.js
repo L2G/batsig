@@ -114,11 +114,14 @@ TunerTwitter.enclose(function () {
             //             meaning as arguments to the string slice() method
             //
             var text = tweet.text;
-            var hashtags = tweet.entities.hashtags;
-            outerObject.emit('message', util.inspect(text));
-            hashtags.forEach(function (hashtag) {
-                outerObject.emit('message', util.inspect(hashtag));
-            });
+            var regex = outerObject.regex;
+            log.debug('Received tweet: ' + util.inspect(text));
+            if (text.search(regex) > -1) {
+                log.debug('Found a match with regexp ' + util.inspect(regex));
+                outerObject.emit('message', util.inspect(text));
+            } else {
+                log.debug('Did not match regexp ' + util.inspect(regex));
+            }
         });
         twitStream.on('disconnect', function (disconnectMessage) {
             outerObject.emit('lost', 'Twitter disconnected with this message: ' + disconnectMessage);
