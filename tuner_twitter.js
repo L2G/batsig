@@ -112,7 +112,7 @@ TunerTwitter.enclose(function () {
             log.debug('Received tweet: ' + util.inspect(text));
             if (text.search(regex) > -1) {
                 log.debug('Found a match with regexp ' + util.inspect(regex));
-                outerObject.emit('message', util.inspect(text));
+                outerObject.emit('message', text);
             } else {
                 log.debug('Did not match regexp ' + util.inspect(regex));
             }
