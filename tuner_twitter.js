@@ -68,13 +68,13 @@ var TunerTwitter = TunerBase.compose(
             // No need to do any work if there are no keywords
             if (!this.keywords) {
                 log.debug('TunerTwitter has no keywords to match; will match all tweets from user');
-                keywordRegex = new RegExp('.');
+                keywordRegex = new RegExp('(?:.)');
             } else {
                 log.debug('Keywords to be matched: ' + util.inspect(this.keywords));
 
                 // Escape characters in keywords for safety in a regular expression
                 sanitizedKeywords = this.keywords.map(function (keyword) {
-                    return keyword.replace(/[^a-z0-9_@#-]/g, '\\$&')
+                    return keyword.replace(/[^a-z0-9_@#\-]/g, '\\$&')
                                   .replace(/^\w/, '\\b$&')
                                   .replace(/\w$/, '$&\\b');
                 });
