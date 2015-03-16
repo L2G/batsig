@@ -11,42 +11,35 @@ var TunerBase = require('./tuner_base');
 var twitterCreds = require('./twitter_creds')();
 
 var TunerTwitter = TunerBase.compose(
-    stampit({
-        // setup is called externally, e.g. by a repeater
-        setup: function setup() {
-            if (this.twitterID) {
-                log.debug('Already have Twitter ID: ' + this.twitterID);
-                this.readyCheck();
-            } else {
-                this.lookUpTwitterIdFor(this.twitterName);
-                this.convertKeywordsToRegex();
-            }
-        },
-        // readyCheck is called when a setup function is done.  If everything
-        // looks to be in order, it will emit the 'ready' signal.
-        readyCheck: function readyCheck() {
-            if (!this.twitterID) {
-                log.debug('TunerTwitter.readyCheck(): still no twitterID');
-            } else if (!this.regex) {
+    stampit().state({
+        twitterName: null,
+        twitterID:   null,
+        keywords:    null
+    }).enclose(function () {
+        var outerObject = this,
+            twitClient = new Twit(twitterCreds);
+
+        var readyCheck = function readyCheck() {
+            if (!outerObject.twitterID) {
+                log.debug('TunerTwitter.readyCheck(): need twitterID');
+                outerObject.lookUpTwitterIdFor(outerObject.twitterName);
+            } else if (!outerObject.regex) {
                 log.debug('TunerTwitter.readyCheck(): have twitterID but no keyword regex yet');
+                outerObject.convertKeywordsToRegex();
             } else {
                 log.debug('TunerTwitter.readyCheck(): ready!');
-                if (!this.emit('ready')) {
-                    // Reaching this point means the 'ready' signal has been
+                if (!outerObject.emit('ready')) {
+                    // Reaching outerObject point means the 'ready' signal has been
                     // emitted, but there were no listeners
                     log.error('No one was listening to TwitterReady. Sad face!');
                 }
             }
-        }
-    },
-    {
-        twitterName: null,
-        twitterID:   null,
-        keywords:    null
-    },
-    function() {
-        var outerObject = this,
-            twitClient = new Twit(twitterCreds);
+        };
+
+        // setup is called externally, e.g. by a repeater
+        this.setup = function setup() {
+            return readyCheck();
+        };
 
         this.lookUpTwitterIdFor = function lookUpTwitterIdFor(name) {
             twitClient.get('users/show',
@@ -58,7 +51,7 @@ var TunerTwitter = TunerBase.compose(
                                log.debug('Looked up Twitter screen name: ' + name);
                                log.debug('Got ID: ' + data.id);
                                outerObject.twitterID = data.id;
-                               outerObject.readyCheck();
+                               readyCheck();
                            });
         };
 
@@ -89,7 +82,7 @@ var TunerTwitter = TunerBase.compose(
             log.debug('Generated regular expression: ' + util.inspect(this.regex));
 
             // Finished, so check to see if everything else has been set up
-            this.readyCheck();
+            readyCheck();
         };
     })
 );
