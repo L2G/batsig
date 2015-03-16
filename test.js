@@ -1,7 +1,7 @@
 var log = require('./log');
 var TunerTwitter = require('./tuner_twitter');
 
-var tt = TunerTwitter.create({twitterName: 'L2G', keywords: 'test'});
+var tt = TunerTwitter.create({twitterName: 'L2G', keywords: ['test', '@#batsig']});
 //var tt = TunerTwitter.create({twitterID: 14641869});
 log.debug('created new TunerTwitter');
 tt.on('ready', function () {

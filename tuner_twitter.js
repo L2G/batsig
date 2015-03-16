@@ -19,17 +19,23 @@ var TunerTwitter = TunerBase.compose(
                 this.readyCheck();
             } else {
                 this.lookUpTwitterIdFor(this.twitterName);
+                this.convertKeywordsToRegex();
             }
         },
         // readyCheck is called when a setup function is done.  If everything
         // looks to be in order, it will emit the 'ready' signal.
         readyCheck: function readyCheck() {
             if (!this.twitterID) {
-                log.debug("TunerTwitter.readyCheck(): still no twitterID");
-            } else if (!this.emit('ready')) {
-                // Reaching this point means the 'ready' signal has been
-                // emitted, but there were no listeners
-                log.error('No one was listening to TwitterReady. Sad face!');
+                log.debug('TunerTwitter.readyCheck(): still no twitterID');
+            } else if (!this.regex) {
+                log.debug('TunerTwitter.readyCheck(): have twitterID but no keyword regex yet');
+            } else {
+                log.debug('TunerTwitter.readyCheck(): ready!');
+                if (!this.emit('ready')) {
+                    // Reaching this point means the 'ready' signal has been
+                    // emitted, but there were no listeners
+                    log.error('No one was listening to TwitterReady. Sad face!');
+                }
             }
         }
     },
@@ -54,6 +60,36 @@ var TunerTwitter = TunerBase.compose(
                                outerObject.twitterID = data.id;
                                outerObject.readyCheck();
                            });
+        };
+
+        this.convertKeywordsToRegex = function convertKeywordsToRegex() {
+            var sanitizedKeywords, keywordRegex;
+
+            // No need to do any work if there are no keywords
+            if (!this.keywords) {
+                log.debug('TunerTwitter has no keywords to match; will match all tweets from user');
+                keywordRegex = new RegExp('.');
+            } else {
+                log.debug('Keywords to be matched: ' + util.inspect(this.keywords));
+
+                // Escape characters in keywords for safety in a regular expression
+                sanitizedKeywords = this.keywords.map(function (keyword) {
+                    return keyword.replace(/[^a-z0-9_@#-]/g, '\\$&')
+                                  .replace(/^\w/, '\\b$&')
+                                  .replace(/\w$/, '$&\\b');
+                });
+
+                log.debug('Sanitized for regular expression: ' + util.inspect(sanitizedKeywords));
+
+                // Join multiple keywords into a single regex
+                keywordRegex = new RegExp('(?:' + sanitizedKeywords.join('|') + ')');
+            }
+
+            this.regex = keywordRegex;
+            log.debug('Generated regular expression: ' + util.inspect(this.regex));
+
+            // Finished, so check to see if everything else has been set up
+            this.readyCheck();
         };
     })
 );
