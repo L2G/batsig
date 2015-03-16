@@ -9,10 +9,10 @@ tt.on('ready', function () {
     tt.tuneIn();
 });
 tt.on('tunedIn', function () {
-    log.debug('Twitter tuner is tuned in and listening for messages');
+    log.info('Twitter tuner is tuned in and listening for messages');
 });
 tt.on('message', function (message) {
-    log.debug('Message from Twitter: ' + message);
+    log.info('Message from Twitter: ' + message);
 });
 tt.on('error', function (message) {
     log.debug('Twitter tuner raised an error: ' + message);
