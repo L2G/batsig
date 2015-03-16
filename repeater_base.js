@@ -7,30 +7,31 @@ var RepeaterBase = stampit({
     readyHandler: function readyHandler(tuner) {
         var repeater = this;
         return function () {
-            log.info('Tuner reports it is ready; ' +
+            log.info(tuner.name + ' reports it is ready; ' +
                      repeater.name + ' is now tuning it in');
             tuner.tuneIn();
         };
     },
     tunedInHandler: function tunedInHandler(tuner) {
         return function () {
-            log.info('Tuner is tuned in');
+            log.info(tuner.name + ' is tuned in');
         };
     },
     messageHandler: function messageHandler(tuner) {
         var repeater = this;
         return function (message) {
-            log.info(repeater.name + ' received message: ' + message);
+            log.info(repeater.name + ' received message from ' + tuner.name +
+                     ': ' + message);
         };
     },
     errorHandler: function errorHandler(tuner) {
         return function (message) {
-            log.error('Tuner raised an error: ' + message);
+            log.error(tuner.name + ' raised an error: ' + message);
         };
     },
     lostHandler: function lostHandler(tuner) {
         return function (message) {
-            log.error('Tuner lost its connection: ' + message);
+            log.error(tuner.name + ' lost its connection: ' + message);
         };
     },
     addTuner: function addTuner(tuner) {

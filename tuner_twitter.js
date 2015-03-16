@@ -12,6 +12,7 @@ var twitterCreds = require('./twitter_creds')();
 
 var TunerTwitter = TunerBase.compose(
     stampit().state({
+        name:        'Twitter tuner',
         twitterName: null,
         twitterID:   null,
         keywords:    null

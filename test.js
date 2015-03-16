@@ -4,10 +4,10 @@ var RepeaterNull = require('./repeater_null');
 
 //var tt = TunerTwitter.create({twitterName: 'L2G', keywords: ['test', '@#batsig']});
 var tt = TunerTwitter.create({twitterID: 14641869, keywords: ['#@batsig']});
-log.debug('created new TunerTwitter');
+log.debug('created new ' + tt.name);
 
 var repeater = RepeaterNull.create();
 log.debug('created new ' + repeater.name);
 
 repeater.addTuner(tt);
-log.debug('added tuner to ' + repeater.name);
+log.debug('added ' + tt.name + ' to ' + repeater.name);
