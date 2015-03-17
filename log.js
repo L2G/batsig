@@ -1,19 +1,19 @@
 'use strict';
 
-var Log = {
-    info: function (msg) {
-        return console.log('I ' + msg);
-    },
+var winston = require('winston'),
+    defaultLevel = 'info';
 
-    debug: function (msg) {
-        if (process.env.DEBUG) {
-            return console.log('D ' + msg);
-        }
-    },
+if (process.env.DEBUG) {
+    defaultLevel = 'debug';
+}
 
-    error: function (msg) {
-        return console.error('E ' + msg);
-    }
-};
+var log = new (winston.Logger)({
+    transports: [
+        new (winston.transports.Console)({
+            level: defaultLevel,
+            colorize: true
+        })
+    ]
+});
 
-module.exports = Log;
+module.exports = log;
