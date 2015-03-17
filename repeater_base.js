@@ -2,14 +2,12 @@
 
 var stampit = require('stampit');
 var log = require('./log');
+var Promise = require('promise');
 
 var RepeaterBase = stampit({
     readyHandler: function readyHandler(tuner) {
-        var repeater = this;
         return function () {
-            log.info(tuner.name + ' reports it is ready; ' +
-                     repeater.name + ' is now tuning it in');
-            tuner.tuneIn();
+            log.info(tuner.name + ' reports it is ready');
         };
     },
     tunedInHandler: function tunedInHandler(tuner) {
@@ -35,13 +33,17 @@ var RepeaterBase = stampit({
         };
     },
     addTuner: function addTuner(tuner) {
-        log.info(this.name + ' is adding new tuner');
-        tuner.on('ready',   this.readyHandler(tuner));
-        tuner.on('tunedIn', this.tunedInHandler(tuner));
-        tuner.on('message', this.messageHandler(tuner));
-        tuner.on('error',   this.errorHandler(tuner));
-        tuner.on('lost',    this.lostHandler(tuner));
-        tuner.setup();
+        var repeater = this;
+
+        return new Promise(function(resolve) {
+            log.info(this.name + ' is adding new tuner');
+            tuner.on('ready',   this.readyHandler(tuner));
+            tuner.on('tunedIn', this.tunedInHandler(tuner));
+            tuner.on('message', this.messageHandler(tuner));
+            tuner.on('error',   this.errorHandler(tuner));
+            tuner.on('lost',    this.lostHandler(tuner));
+            resolve(repeater);
+        });
     },
 },
 {
