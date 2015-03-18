@@ -3,10 +3,10 @@
 var cli = require('commander');
 var daemon = require('daemon');
 
-var log = require('./log');
-var tunerTwitter = require('./tuner_twitter');
-var repeaterNull = require('./repeater_null');
-var repeaterPushover = require('./repeater_pushover');
+var log = require('../log');
+var tunerTwitter = require('../tuner_twitter');
+var repeaterNull = require('../repeater_null');
+var repeaterPushover = require('../repeater_pushover');
 
 cli.option('-d, --daemon', 'Run as a background process')
    .parse(process.argv);
