@@ -11,6 +11,22 @@ contact [me][] with questions.
 
 * [Node.js][]
 
+## Known bugs
+
+Using addTuner() on more than one repeater to make them listen to the same
+tuner can cause undesirable behavior.  In particular, I have added the Twitter
+tuner to both the Pushover repeater and the null repeater at the same time, and
+then have seen each Twitter message cause _two_ Pushover notifications to be
+sent.
+
+There is no useful documentation for how to set this up.
+
+The coding style is all over the map because I'm still new to Node.js.
+
+There are no unit tests, integration tests, etc.
+
+This should be organized and made usable like any other npm package.
+
 ## License
 
 The code is made available to you under the terms of the MIT License; see the
