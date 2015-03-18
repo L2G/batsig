@@ -4,10 +4,10 @@ var stampit = require('stampit');
 var request = require('request');
 var util    = require('util');
 
-var RepeaterBase = require('./repeater_base');
+var repeaterBase = require('./repeater_base');
 var log = require('./log');
 
-var RepeaterPushover = stampit().state({
+var repeaterPushover = stampit().state({
     name: 'Pushover repeater',
     // pushoverOptions should be an object with parameters for the Pushover
     // Message API. At a minimum it needs to have:
@@ -16,7 +16,7 @@ var RepeaterPushover = stampit().state({
     pushoverOptions: {}
 });
 
-RepeaterPushover.enclose(function () {
+repeaterPushover.enclose(function () {
     var repeater = this;
     var pushoverOptions = stampit().state({ priority: 0 })
                                    .state(this.pushoverOptions);
@@ -53,4 +53,4 @@ RepeaterPushover.enclose(function () {
     };
 });
 
-module.exports = stampit.compose(RepeaterBase, RepeaterPushover);
+module.exports = stampit.compose(repeaterBase, repeaterPushover);

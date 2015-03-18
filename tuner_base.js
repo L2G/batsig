@@ -6,7 +6,7 @@ var EventEmitter = stampit.convertConstructor(
     require('events').EventEmitter
 );
 
-var TunerBase = stampit({
+var tunerBase = stampit({
     tuneIn: function() {
         throw 'tuneIn not yet implemented';
     }
@@ -15,4 +15,4 @@ var TunerBase = stampit({
     name: 'Nameless tuner'
 });
 
-module.exports = stampit.compose(EventEmitter, TunerBase);
+module.exports = stampit.compose(EventEmitter, tunerBase);

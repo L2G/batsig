@@ -7,10 +7,10 @@ var util = require('util');
 
 // Local libs
 var log = require('./log');
-var TunerBase = require('./tuner_base');
+var tunerBase = require('./tuner_base');
 var twitterCreds = require('./twitter_creds')();
 
-var TunerTwitter = TunerBase.compose(
+var tunerTwitter = tunerBase.compose(
     stampit().state({
         name:        'Twitter tuner',
         twitterName: null,
@@ -22,13 +22,13 @@ var TunerTwitter = TunerBase.compose(
 
         var readyCheck = function readyCheck() {
             if (!outerObject.twitterID) {
-                log.debug('TunerTwitter.readyCheck(): need twitterID');
+                log.debug('tunerTwitter.readyCheck(): need twitterID');
                 outerObject.lookUpTwitterIdFor(outerObject.twitterName);
             } else if (!outerObject.regex) {
-                log.debug('TunerTwitter.readyCheck(): have twitterID but no keyword regex yet');
+                log.debug('tunerTwitter.readyCheck(): have twitterID but no keyword regex yet');
                 outerObject.convertKeywordsToRegex();
             } else {
-                log.debug('TunerTwitter.readyCheck(): ready!');
+                log.debug('tunerTwitter.readyCheck(): ready!');
                 if (!outerObject.emit('ready')) {
                     // Reaching outerObject point means the 'ready' signal has been
                     // emitted, but there were no listeners
@@ -61,7 +61,7 @@ var TunerTwitter = TunerBase.compose(
 
             // No need to do any work if there are no keywords
             if (!this.keywords) {
-                log.debug('TunerTwitter has no keywords to match; will match all tweets from user');
+                log.debug('tunerTwitter has no keywords to match; will match all tweets from user');
                 keywordRegex = new RegExp('(?:.)');
             } else {
                 log.debug('Keywords to be matched: ' + util.inspect(this.keywords));
@@ -87,7 +87,7 @@ var TunerTwitter = TunerBase.compose(
         };
     })
 );
-TunerTwitter.enclose(function () {
+tunerTwitter.enclose(function () {
     var outerObject = this,
         twitClient = new Twit(twitterCreds),
         twitStream = null;
@@ -124,4 +124,4 @@ TunerTwitter.enclose(function () {
         outerObject.emit('tunedIn');
     };
 });
-module.exports = TunerTwitter;
+module.exports = tunerTwitter;

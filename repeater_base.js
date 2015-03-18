@@ -3,7 +3,7 @@
 var stampit = require('stampit');
 var log = require('./log');
 
-var RepeaterBase = stampit({
+var repeaterBase = stampit({
     readyHandler: function readyHandler(tuner) {
         var repeater = this;
         return function () {
@@ -48,4 +48,4 @@ var RepeaterBase = stampit({
     name: 'Nameless repeater'
 });
 
-module.exports = RepeaterBase;
+module.exports = repeaterBase;
