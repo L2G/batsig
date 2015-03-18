@@ -2,11 +2,11 @@
 
 var stampit = require('stampit');
 
-var RepeaterBase = require('./repeater_base');
+var repeaterBase = require('./repeater_base');
 var log = require('./log');
 
-var RepeaterNull = stampit().state({
+var repeaterNull = stampit().state({
     name: 'Null repeater'
 });
 
-module.exports = stampit.compose(RepeaterBase, RepeaterNull);
+module.exports = stampit.compose(repeaterBase, repeaterNull);
