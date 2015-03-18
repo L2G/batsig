@@ -1,19 +1,9 @@
 #!/usr/bin/env node
 
-var cli = require('commander');
-var daemon = require('daemon');
-
 var log = require('../log');
 var tunerTwitter = require('../tuner_twitter');
 var repeaterNull = require('../repeater_null');
 var repeaterPushover = require('../repeater_pushover');
-
-cli.option('-d, --daemon', 'Run as a background process')
-   .parse(process.argv);
-
-if (cli.daemon) {
-    require('daemon')();
-}
 
 //var tt = tunerTwitter.create({twitterName: 'L2G', keywords: ['test', '@#batsig']});
 var tt = tunerTwitter.create({twitterID: 14641869, keywords: ['#@batsig']});
