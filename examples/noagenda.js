@@ -6,7 +6,7 @@ var repeaterPushover = require('../repeater_pushover');
 
 var tuner = tunerTwitter.create({
     twitterName: 'adamcurry',
-    keywords: ['#batsig', '@#pocketnoagenda']
+    keywords: ['#batsig', '#@pocketnoagenda']
 });
 log.debug('created new ' + tuner.name);
 
