@@ -13,8 +13,7 @@ log.debug('created new ' + tuner.name);
 var repeater = repeaterPushover.create({
     pushoverOptions: {
         token: process.env.PUSHOVER_TOKEN,
-        user: process.env.PUSHOVER_USER_NA_PRODUCERS,
-        title: 'TEST'
+        user: process.env.PUSHOVER_USER_NA_PRODUCERS
     }
 });
 log.debug('created new ' + repeater.name);
