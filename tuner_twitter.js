@@ -92,31 +92,33 @@ tunerTwitter.enclose(function () {
         twitClient = new Twit(twitterCreds),
         twitStream = null;
 
+    function filterAndEmitTweet(tweet) {
+        // The tweet object contains these properties of interest to us:
+        //
+        // text - the plain text of the tweet
+        // entities.hashtags - an array of 0 or more objects representing
+        //     hashtags parsed from the text:
+        //         text - the plain text of the hashtag, WITHOUT the hash
+        //             sign
+        //         indicies - array of 2 integers representing the range
+        //             within the tweet's text where the hashtag is found,
+        //             INCLUDING the hash sign; these integers have the same
+        //             meaning as arguments to the string slice() method
+        //
+        var text = tweet.text;
+        var regex = outerObject.regex;
+        log.debug('Received tweet: ' + util.inspect(text));
+        if (text.search(regex) > -1) {
+            log.debug('Found a match with regexp ' + util.inspect(regex));
+            outerObject.emit('message', text);
+        } else {
+            log.debug('Did not match regexp ' + util.inspect(regex));
+        }
+    }
+
     this.tuneIn = function tuneIn () {
         twitStream = twitClient.stream('statuses/filter', { follow: outerObject.twitterID });
-        twitStream.on('tweet', function (tweet) {
-            // The tweet object contains these properties of interest to us:
-            //
-            // text - the plain text of the tweet
-            // entities.hashtags - an array of 0 or more objects representing
-            //     hashtags parsed from the text:
-            //         text - the plain text of the hashtag, WITHOUT the hash
-            //             sign
-            //         indicies - array of 2 integers representing the range
-            //             within the tweet's text where the hashtag is found,
-            //             INCLUDING the hash sign; these integers have the same
-            //             meaning as arguments to the string slice() method
-            //
-            var text = tweet.text;
-            var regex = outerObject.regex;
-            log.debug('Received tweet: ' + util.inspect(text));
-            if (text.search(regex) > -1) {
-                log.debug('Found a match with regexp ' + util.inspect(regex));
-                outerObject.emit('message', text);
-            } else {
-                log.debug('Did not match regexp ' + util.inspect(regex));
-            }
-        });
+        twitStream.on('tweet', filterAndEmitTweet);
         twitStream.on('disconnect', function (disconnectMessage) {
             outerObject.emit('lost', 'Twitter disconnected with this message: ' + disconnectMessage);
         });
