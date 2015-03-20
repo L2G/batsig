@@ -93,9 +93,13 @@ tunerTwitter.enclose(function () {
         twitStream = null;
 
     function filterAndEmitTweet(tweet) {
-        // The tweet object contains these properties of interest to us:
+        // The tweet object contains these properties of interest to us
+        // (see https://dev.twitter.com/overview/api/tweets):
         //
         // text - the plain text of the tweet
+        //
+        // retweeted_status - true if this is a retweet, false if not
+        //
         // entities.hashtags - an array of 0 or more objects representing
         //     hashtags parsed from the text:
         //         text - the plain text of the hashtag, WITHOUT the hash
@@ -108,10 +112,13 @@ tunerTwitter.enclose(function () {
         var text = tweet.text;
         var regex = outerObject.regex;
         log.debug('Received tweet: ' + util.inspect(text));
-        if (text.search(regex) <= -1) {
+        if (tweet.retweeted_status) {
+            log.debug('This is a retweet, not an original');
+        } else if (text.search(regex) <= -1) {
             log.debug('Did not match regexp ' + util.inspect(regex));
         } else {
-            log.debug('Found a match with regexp ' + util.inspect(regex));
+            log.debug('Original tweet, and found a match with regexp '
+                      + util.inspect(regex));
             outerObject.emit('message', text);
         }
     }
