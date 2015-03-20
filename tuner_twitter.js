@@ -108,11 +108,11 @@ tunerTwitter.enclose(function () {
         var text = tweet.text;
         var regex = outerObject.regex;
         log.debug('Received tweet: ' + util.inspect(text));
-        if (text.search(regex) > -1) {
+        if (text.search(regex) <= -1) {
+            log.debug('Did not match regexp ' + util.inspect(regex));
+        } else {
             log.debug('Found a match with regexp ' + util.inspect(regex));
             outerObject.emit('message', text);
-        } else {
-            log.debug('Did not match regexp ' + util.inspect(regex));
         }
     }
 
