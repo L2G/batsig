@@ -1,7 +1,6 @@
 'use strict';
 
-var dotenv = require('dotenv');
-dotenv.load();
+require('dotenv').load();
 
 module.exports = function () {
     return {

@@ -1,5 +1,7 @@
 'use strict';
 
+require('dotenv').load();
+
 var winston = require('winston'),
     defaultLevel = 'info';
 
