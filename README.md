@@ -13,6 +13,13 @@ contact [me][] with questions.
 
 ## Known bugs
 
+The Twitter tuner is not optimized for "high volume streams" as recommended
+by [Twitter's streaming API
+documentation](https://dev.twitter.com/streaming/overview/processing).  Handling
+of incoming tweets at the rate of more than one every few seconds is likely to
+be unpredictable.  There is also no detection or special handling of duplicate
+tweets, as the Twitter docs also recommend.
+
 Using addTuner() on more than one repeater to make them listen to the same
 tuner can cause undesirable behavior.  In particular, I have added the Twitter
 tuner to both the Pushover repeater and the null repeater at the same time, and
