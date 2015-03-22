@@ -8,17 +8,17 @@ var util = require('util');
 // Local libs
 var log = require('./log');
 var tunerBase = require('./tuner_base');
-var twitterCreds = require('./twitter_creds')();
 
 var tunerTwitter = tunerBase.compose(
     stampit().state({
-        name:        'Twitter tuner',
-        twitterName: null,
-        twitterID:   null,
-        keywords:    null
+        name:         'Twitter tuner',
+        twitterName:  null,
+        twitterID:    null,
+        keywords:     null,
+        twitterCreds: {}
     }).enclose(function () {
         var outerObject = this,
-            twitClient = new Twit(twitterCreds);
+            twitClient = new Twit(this.twitterCreds);
 
         var readyCheck = function readyCheck() {
             if (!outerObject.twitterID) {
@@ -89,7 +89,7 @@ var tunerTwitter = tunerBase.compose(
 );
 tunerTwitter.enclose(function () {
     var outerObject = this,
-        twitClient = new Twit(twitterCreds),
+        twitClient = new Twit(this.twitterCreds),
         twitStream = null;
 
     function filterAndEmitTweet(tweet) {
