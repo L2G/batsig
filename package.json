@@ -8,6 +8,7 @@
   },
   "main": "listen.js",
   "dependencies": {
+    "bluebird": "^2.9",
     "dotenv": "^1.0",
     "request": "^2.53",
     "stampit": "^1.1",
