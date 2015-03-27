@@ -6,7 +6,6 @@
     "type": "git",
     "url": "https://github.com/L2G/batsig"
   },
-  "main": "listen.js",
   "dependencies": {
     "dotenv": "^1.0",
     "request": "^2.53",
