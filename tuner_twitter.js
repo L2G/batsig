@@ -89,8 +89,7 @@ var tunerTwitter = tunerBase.compose(
 );
 tunerTwitter.enclose(function () {
     var outerObject = this,
-        twitClient = new Twit(this.twitterCreds),
-        twitStream = null;
+        twitClient = new Twit(this.twitterCreds);
 
     function filterAndEmitTweet(tweet) {
         // The tweet object contains these properties of interest to us
@@ -123,14 +122,27 @@ tunerTwitter.enclose(function () {
         }
     }
 
-    this.tuneIn = function tuneIn () {
-        twitStream = twitClient.stream('statuses/filter', { follow: outerObject.twitterID });
-        twitStream.on('tweet', filterAndEmitTweet);
-        twitStream.on('disconnect', function (disconnectMessage) {
-            outerObject.emit('lost', 'Twitter disconnected with this message: ' + disconnectMessage);
-        });
+    function handleError(err) {
+        outerObject.emit('error', err);
+    }
 
+    function handleDisconnect(message) {
+        outerObject.emit('lost', 'Twitter disconnected with this message: ' + message);
+    }
+
+    function startStream() {
+        var twitStream = twitClient.stream('statuses/filter', { follow: outerObject.twitterID });
+        twitStream.on('error', handleError);
+        twitStream.on('tweet', filterAndEmitTweet);
+        twitStream.on('disconnect', handleDisconnect);
+        return twitStream;
+    }
+
+    this.tuneIn = function tuneIn () {
+        startStream();
         outerObject.emit('tunedIn');
     };
+
+    this.start = this.tuneIn;
 });
 module.exports = tunerTwitter;
