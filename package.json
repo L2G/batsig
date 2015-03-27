@@ -16,11 +16,13 @@
     "winston": "^0.9.0"
   },
   "devDependencies": {
-    "jslint": "^0.9.0-pre005"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Lawrence Leonard Gilbert",
-  "license": "CC-BY-4.0"
+  "license": "CC-BY-4.0",
+  "jshintConfig": {
+    "node": true
+  }
 }
