@@ -14,10 +14,12 @@
     "winston": "^0.9"
   },
   "devDependencies": {
-    "jslint": "^0.9.0-pre005"
+    "expect.js": "^0.3.1",
+    "jslint": "^0.9.0-pre005",
+    "mocha": "^2.2.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "Lawrence Leonard Gilbert",
   "license": "CC-BY-4.0"
