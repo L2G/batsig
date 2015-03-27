@@ -18,7 +18,7 @@
     "mocha": "^2.2.1"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha test/*"
   },
   "author": "Lawrence Leonard Gilbert",
   "license": "CC-BY-4.0",
