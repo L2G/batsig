@@ -117,8 +117,8 @@ tunerTwitter.enclose(function () {
         } else if (text.search(regex) <= -1) {
             log.debug('Did not match regexp ' + util.inspect(regex));
         } else {
-            log.debug('Original tweet, and found a match with regexp '
-                      + util.inspect(regex));
+            log.debug('Original tweet, and found a match with regexp ' +
+                      util.inspect(regex));
             outerObject.emit('message', text);
         }
     }
