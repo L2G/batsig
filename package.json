@@ -23,6 +23,20 @@
   "author": "Lawrence Leonard Gilbert",
   "license": "CC-BY-4.0",
   "jshintConfig": {
-    "node": true
+    "bitwise": true,
+    "curly": true,
+    "eqeqeq": true,
+    "futurehostile": true,
+    "latedef": true,
+    "maxdepth": 2,
+    "maxparams": 3,
+    "maxstatements": 11,
+    "noarg": true,
+    "node": true,
+    "nonew": true,
+    "singleGroups": true,
+    "strict": true,
+    "undef": true,
+    "unused": true
   }
 }
