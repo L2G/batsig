@@ -1,3 +1,6 @@
+/* jshint mocha: true */
+'use strict';
+
 var expect = require('expect.js');
 var sinon = require('sinon');
 
