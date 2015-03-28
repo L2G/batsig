@@ -9,9 +9,9 @@ if (process.env.DEBUG) {
     defaultLevel = 'debug';
 }
 
-var log = new (winston.Logger)({
+var log = new winston.Logger({
     transports: [
-        new (winston.transports.Console)({
+        new winston.transports.Console({
             level: defaultLevel,
             colorize: true
         })
