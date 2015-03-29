@@ -1,6 +1,7 @@
 'use strict';
 
 // Node libs
+var replaceAll = require('underscore.string/replaceAll');
 var stampit = require('stampit');
 var Twit = require('twit');
 var util = require('util');
@@ -91,6 +92,19 @@ tunerTwitter.enclose(function () {
     var outerObject = this,
         twitClient = new Twit(this.twitterCreds);
 
+    // Takes the text and the "urls" entity from a tweet, and returns the text
+    // with all t.co URLs substituted with their originals.  See
+    // filterAndEmitTweet().
+    function substituteTwitterUrls(text, urls) {
+        var restoredText = text;
+        urls.forEach(function (urlObj) {
+            log.debug(urlObj);
+            log.debug('Substituting ' + urlObj.url + ' -> ' + urlObj.expanded_url);
+            restoredText = replaceAll(restoredText, urlObj.url, urlObj.expanded_url);
+        });
+        return restoredText;
+    }
+
     function filterAndEmitTweet(tweet) {
         // The tweet object contains these properties of interest to us
         // (see https://dev.twitter.com/overview/api/tweets):
@@ -108,9 +122,23 @@ tunerTwitter.enclose(function () {
         //             INCLUDING the hash sign; these integers have the same
         //             meaning as arguments to the string slice() method
         //
+        // entities.urls - an array of 0 or more objects representing URLs
+        //     parsed from the text and replaced with Twitter's click-tracking
+        //     URLs (t.co domain):
+        //         url - the http://t.co URL appearing in the text
+        //         expanded_url - the actual URL referenced by the t.co URL
+        //             (including "http://" even if not included in the
+        //             original tweet)
+        //         display_url - the abbreviated URL as displayed by Twitter
+        //             ("http://" and "http://www." are dropped even if they
+        //             were in the original tweet)
+        //         indices - pair of integers representing the substring range
+        //             of the t.co URL within the text
+        //
         var text = tweet.text;
         var regex = outerObject.regex;
-        log.debug('Received tweet: ' + util.inspect(text));
+        log.debug('Received tweet:');
+        log.debug(tweet);
         if (tweet.retweeted_status) {
             log.debug('This is a retweet, not an original');
         } else if (text.search(regex) <= -1) {
@@ -119,6 +147,8 @@ tunerTwitter.enclose(function () {
             log.debug('Original tweet, and found a match with regexp ' +
                       util.inspect(regex));
             outerObject.emit('message', text);
+            outerObject.emit('message',
+                             substituteTwitterUrls(text, tweet.entities.urls));
         }
     }
 
