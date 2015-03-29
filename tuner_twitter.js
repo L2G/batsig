@@ -111,6 +111,14 @@ tunerTwitter.enclose(function () {
         //
         // text - the plain text of the tweet
         //
+        // user.id - integer of the numeric Twitter ID of the user sending this
+        //     tweet (this CAN be different than the Twitter user being followed
+        //     by the stream... *sigh*)
+        //
+        // user.id_str - id (see above) as a string; it will be necessary to use
+        //     the string instead of the integer at some point, probably when
+        //     Twitter IDs rise above 2^31 - 1
+        //
         // retweeted_status - true if this is a retweet, false if not
         //
         // entities.hashtags - an array of 0 or more objects representing
@@ -138,18 +146,30 @@ tunerTwitter.enclose(function () {
         var text = tweet.text;
         var regex = outerObject.regex;
         log.debug('Received tweet:');
-        log.debug(tweet);
-        if (tweet.retweeted_status) {
-            log.debug('This is a retweet, not an original');
-        } else if (text.search(regex) <= -1) {
-            log.debug('Did not match regexp ' + util.inspect(regex));
-        } else {
-            log.debug('Original tweet, and found a match with regexp ' +
-                      util.inspect(regex));
-            outerObject.emit('message', text);
-            outerObject.emit('message',
-                             substituteTwitterUrls(text, tweet.entities.urls));
+        log.debug(util.inspect(tweet));
+
+        // TODO: break all these checks out into separate, maybe even async functions
+
+        log.debug('Checking if this is from twitter ID ' + outerObject.twitterID);
+        if (tweet.user.id !== outerObject.twitterID) {
+            return log.debug('It is not; ignoring');
         }
+        log.debug('Yes, it is');
+
+        log.debug('Now checking if this is an original tweet or a retweet');
+        if (tweet.retweeted_status) {
+            return log.debug('This is a retweet; ignoring');
+        }
+        log.debug('This is original');
+
+        log.debug('Now checking for a match with regexp ' + util.inspect(regex));
+        if (text.search(regex) <= -1) {
+            return log.debug('No match; ignoring');
+        }
+        log.debug("Yes, it's a match");
+
+        // Replace t.co URLs in the text before emitting the message
+        outerObject.emit('message', substituteTwitterUrls(text, tweet.entities.urls));
     }
 
     function handleError(err) {
