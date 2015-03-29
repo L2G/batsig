@@ -1,6 +1,6 @@
 {
   "name": "batsig",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Listen for Twitter messages and relay them to other channels",
   "repository": {
     "type": "git",
