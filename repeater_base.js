@@ -5,11 +5,8 @@ var log = require('./log');
 
 var repeaterBase = stampit({
     readyHandler: function readyHandler(tuner) {
-        var repeater = this;
         return function () {
-            log.info(tuner.name + ' reports it is ready; ' +
-                     repeater.name + ' is now tuning it in');
-            tuner.tuneIn();
+            log.info(tuner.name + ' reports it is ready');
         };
     },
     tunedInHandler: function tunedInHandler(tuner) {
@@ -41,7 +38,6 @@ var repeaterBase = stampit({
         tuner.on('message', this.messageHandler(tuner));
         tuner.on('error',   this.errorHandler(tuner));
         tuner.on('lost',    this.lostHandler(tuner));
-        tuner.setup();
     },
 },
 {
