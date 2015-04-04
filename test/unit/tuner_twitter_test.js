@@ -2,6 +2,10 @@
 'use strict';
 
 var expect = require('expect.js');
+var sinon = require('sinon');
+
+// Make a stub to block twit from being called
+var Twit = require('twit');
 
 var tunerTwitter = require('../../lib/tuner_twitter');
 
@@ -28,21 +32,29 @@ describe('tunerTwitter', function () {
     });
 
     context('.create', function () {
-        context('without "twitterID" or "twitterName"', function () {
+        var testTunerTwitter = tunerTwitter.state({
+            _twitFactory: function () {
+                return sinon.createStubInstance(Twit);
+            }
+        });
+
+        context('without "twitterName" or "twitterID"', function () {
             it('should throw an error', function () {
-                expect(tunerTwitter.create).to.throwError();
+                expect(testTunerTwitter.create).to.throwError();
             });
         });
 
         context('with "twitterID"', function () {
             it('should not throw an error (assumes ID is valid)', function () {
-                expect(tunerTwitter.create).not.to.throwError();
+                expect(testTunerTwitter.create).withArgs({twitterID: 3333333}).
+                    not.to.throwError();
             });
         });
 
         context('with "twitterName"', function () {
             it('should not throw an error (assumes name is valid)', function () {
-                expect(tunerTwitter.create).not.to.throwError();
+                expect(testTunerTwitter.create).withArgs({twitterName: 'L2G'}).
+                    not.to.throwError();
             });
         });
     });
