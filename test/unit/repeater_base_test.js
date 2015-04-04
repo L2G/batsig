@@ -4,8 +4,8 @@
 var expect = require('expect.js');
 var sinon = require('sinon');
 
-var repeaterBase = require('../../repeater_base');
-var tunerBase = require('../../tuner_base');
+var repeaterBase = require('../../lib/repeater_base');
+var tunerBase = require('../../lib/tuner_base');
 
 describe('repeaterBase', function () {
     var instance = repeaterBase.create();
